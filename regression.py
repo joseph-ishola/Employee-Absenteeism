@@ -1,11 +1,23 @@
+import numpy as np
+
 def Maximimum(list):
-    max = 0
+    max = -(np.inf)
     for i in range(len(list)):
         if list[i] > max:
             max = list[i]
-    return max
+    print(max)
 
 
 
-Numbers = [4, 52, 21, 95, 8, 25, 81]
-print(Maximimum(Numbers))
+def Minimum(list):
+    min = np.inf
+    for i in range(len(list)):
+        if list[i] < min:
+            min = list[i]
+    print(min)
+
+
+Numbers = [5, 8, 51, 73, 37, 21, -8, 12, 6]
+
+Maximimum(Numbers)
+Minimum(Numbers)
