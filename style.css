@@ -67,6 +67,21 @@ body {
     margin: 15px 0;
   }
   
+  /* Code Snippet Styles */
+  pre {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 15px;
+    overflow-x: auto;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+  }
+  
   /* Footer */
   footer {
     background: #35424a;

@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Predicting Workplace Absenteeism: Data Science Project</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Syntax Highlighting Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
 </head>
 <body>
   <header>
@@ -19,6 +23,7 @@
       <li><a href="#preprocessing">Data Preprocessing</a></li>
       <li><a href="#model">Model Development</a></li>
       <li><a href="#results">Results & Evaluation</a></li>
+      <li><a href="#code">Code Snippets</a></li>
       <li><a href="#conclusion">Conclusion & Future Work</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -89,6 +94,50 @@
         Visual comparisons, confusion matrices, and error distribution plots further highlight model strengths and weaknesses.
       </p>
       <img src="images/model-results.png" alt="Model Evaluation Metrics">
+    </section>
+    
+    <section id="code">
+      <h2>Code Snippets</h2>
+      <p>
+        Below are some key code snippets that illustrate the steps taken in the project.
+      </p>
+      
+      <h3>Data Preprocessing and Model Training</h3>
+      <pre><code class="python">
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+# Load data
+data = pd.read_csv("absenteeism_data.csv")
+
+# Data cleaning: fill missing values
+data.fillna(method="ffill", inplace=True)
+
+# Split the data into features and target
+X = data.drop("absenteeism", axis=1)
+y = data["absenteeism"]
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Model training
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+      </code></pre>
+      
+      <h3>Exploratory Data Analysis (EDA)</h3>
+      <pre><code class="python">
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Visualize the distribution of absenteeism days
+sns.histplot(data['absenteeism'], kde=True)
+plt.title("Distribution of Absenteeism Days")
+plt.xlabel("Number of Absent Days")
+plt.ylabel("Frequency")
+plt.show()
+      </code></pre>
     </section>
     
     <section id="conclusion">
