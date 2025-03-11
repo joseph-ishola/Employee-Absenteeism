@@ -1,167 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Predicting Workplace Absenteeism: Data Science Project</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Syntax Highlighting Library -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-  <script>hljs.highlightAll();</script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Predicting Workplace Absenteeism</h1>
-    <p>Data Science Project Portfolio</p>
+    <div class="nav-container">
+      <div class="logo">
+        <h1>Workplace Absenteeism</h1>
+        <p>Data Science Project Portfolio</p>
+      </div>
+      <button class="hamburger" id="hamburger">&#9776;</button>
+      <nav>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#overview">Overview</a></li>
+          <li>
+            <a href="#eda">EDA</a>
+            <ul class="dropdown">
+              <li><a href="#eda-descriptive">Descriptive Stats</a></li>
+              <li><a href="#eda-visualization">Visualizations</a></li>
+              <li><a href="#eda-outliers">Outlier Analysis</a></li>
+              <li><a href="#eda-code">Code Walkthrough</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#preprocessing">Preprocessing</a>
+            <ul class="dropdown">
+              <li><a href="#preprocessing-cleaning">Data Cleaning</a></li>
+              <li><a href="#preprocessing-feature">Feature Engineering</a></li>
+              <li><a href="#preprocessing-splitting">Data Splitting</a></li>
+              <li><a href="#preprocessing-code">Code Walkthrough</a></li>
+            </ul>
+          </li>
+          <li><a href="#model">Model</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#conclusion">Conclusion</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
-  
-  <nav>
-    <ul>
-      <li><a href="#overview">Project Overview</a></li>
-      <li><a href="#eda">Exploratory Data Analysis (EDA)</a></li>
-      <li><a href="#preprocessing">Data Preprocessing</a></li>
-      <li><a href="#model">Model Development</a></li>
-      <li><a href="#results">Results & Evaluation</a></li>
-      <li><a href="#code">Code Snippets</a></li>
-      <li><a href="#conclusion">Conclusion & Future Work</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-  
+
   <main>
+    <!-- Overview Section -->
     <section id="overview">
       <h2>Project Overview</h2>
       <p>
-        This project aims to predict workplace absenteeism by analyzing historical employee data. It examines the various factors that affect absenteeism and builds predictive models to help HR and management understand and mitigate absenteeism risks.
+        This project aims to predict workplace absenteeism by analyzing historical employee data.
+        It covers data acquisition, exploratory data analysis (EDA), data cleaning and preprocessing,
+        model development, evaluation, and conclusions. Visual aids and code examples guide you
+        through every step.
       </p>
-      <p>
-        The workflow covers data acquisition, exploratory data analysis (EDA), data cleaning and preprocessing, model development, evaluation, and conclusions. Visual aids and detailed narratives help explain each step of the process.
-      </p>
-      <img src="images/overview-diagram.png" alt="Project Overview Diagram">
+      <img src="images/overview-diagram.png" alt="Project Overview Diagram" />
+      <div class="code-snippet">
+        <pre><code>// Welcome message and basic project setup
+print("Welcome to the Predicting Workplace Absenteeism project!")</code></pre>
+      </div>
     </section>
-    
+
+    <!-- Exploratory Data Analysis (EDA) Section -->
     <section id="eda">
       <h2>Exploratory Data Analysis (EDA)</h2>
       <p>
-        The EDA phase is critical for understanding the dataset. Key steps include:
+        In this section, we dive into various techniques to understand and visualize the dataset,
+        an essential step in any data science workflow.
       </p>
-      <ul>
-        <li><strong>Descriptive Statistics:</strong> Summarizing central tendencies, dispersion, and distribution of key features.</li>
-        <li><strong>Data Visualization:</strong> Creating histograms, scatter plots, and correlation heatmaps to uncover relationships and patterns.</li>
-        <li><strong>Outlier Analysis:</strong> Identifying anomalies that may distort model training.</li>
-      </ul>
-      <img src="images/eda-visualizations.png" alt="EDA Visualizations">
+
+      <!-- Descriptive Statistics -->
+      <section id="eda-descriptive">
+        <h3>Descriptive Statistics</h3>
+        <p>Summarizing key statistics to understand central tendencies, dispersion, and overall data structure.</p>
+        <div class="code-snippet">
+          <pre><code>import pandas as pd
+
+# Load the dataset
+df = pd.read_csv('employee_data.csv')
+
+# Display descriptive statistics
+print(df.describe())</code></pre>
+        </div>
+      </section>
+
+      <!-- Data Visualization -->
+      <section id="eda-visualization">
+        <h3>Data Visualization</h3>
+        <p>Visualizing distributions and relationships using histograms and scatter plots.</p>
+        <div class="code-snippet">
+          <pre><code>import matplotlib.pyplot as plt
+
+# Plot the distribution of absences
+plt.hist(df['absences'], bins=30, color='skyblue')
+plt.title('Distribution of Absences')
+plt.xlabel('Number of Absences')
+plt.ylabel('Frequency')
+plt.show()</code></pre>
+        </div>
+      </section>
+
+      <!-- Outlier Analysis -->
+      <section id="eda-outliers">
+        <h3>Outlier Analysis</h3>
+        <p>Using boxplots to identify potential anomalies in the data.</p>
+        <div class="code-snippet">
+          <pre><code>import seaborn as sns
+
+# Create a boxplot to detect outliers in absences
+sns.boxplot(x=df['absences'])
+plt.title('Boxplot for Absences')
+plt.show()</code></pre>
+        </div>
+      </section>
+
+      <!-- Additional EDA Code Walkthrough -->
+      <section id="eda-code">
+        <h3>EDA Code Walkthrough</h3>
+        <p>
+          This section provides an overview of additional EDA code, including correlation analysis and pair plots.
+        </p>
+        <div class="code-snippet">
+          <pre><code>import seaborn as sns
+
+# Correlation heatmap to visualize relationships between variables
+plt.figure(figsize=(10, 8))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()</code></pre>
+        </div>
+      </section>
+
+      <img src="images/eda-visualizations.png" alt="EDA Visualizations" />
     </section>
-    
+
+    <!-- Data Preprocessing Section -->
     <section id="preprocessing">
       <h2>Data Preprocessing</h2>
       <p>
-        Data preprocessing sets the foundation for robust model performance. The steps include:
+        Preprocessing transforms raw data into a cleaner dataset ready for modeling. This section includes data cleaning, feature engineering, and splitting the dataset.
       </p>
-      <ul>
-        <li><strong>Data Cleaning:</strong> Handling missing values, dealing with outliers, and correcting inconsistencies.</li>
-        <li><strong>Feature Engineering:</strong> Creating new features and transforming existing ones to better represent the underlying patterns.</li>
-        <li><strong>Data Splitting:</strong> Dividing the dataset into training and test sets to properly evaluate model performance.</li>
-      </ul>
-      <img src="images/data-preprocessing.png" alt="Data Preprocessing Steps">
+
+      <!-- Data Cleaning -->
+      <section id="preprocessing-cleaning">
+        <h3>Data Cleaning</h3>
+        <p>Handling missing values, removing duplicates, and ensuring consistency in the data.</p>
+        <div class="code-snippet">
+          <pre><code># Filling missing values with column means
+df.fillna(df.mean(), inplace=True)
+print("Missing values handled!")</code></pre>
+        </div>
+      </section>
+
+      <!-- Feature Engineering -->
+      <section id="preprocessing-feature">
+        <h3>Feature Engineering</h3>
+        <p>Creating new features and transforming existing ones to improve model performance.</p>
+        <div class="code-snippet">
+          <pre><code># Extracting day of the week from a date column
+df['day_of_week'] = pd.to_datetime(df['date']).dt.dayofweek
+print(df.head())</code></pre>
+        </div>
+      </section>
+
+      <!-- Data Splitting -->
+      <section id="preprocessing-splitting">
+        <h3>Data Splitting</h3>
+        <p>Dividing data into training and test sets for unbiased model evaluation.</p>
+        <div class="code-snippet">
+          <pre><code>from sklearn.model_selection import train_test_split
+
+# Splitting the dataset into features and target
+X = df.drop('absences', axis=1)
+y = df['absences']
+
+# Splitting into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print("Data splitting completed!")</code></pre>
+        </div>
+      </section>
+
+      <!-- Additional Preprocessing Code Walkthrough -->
+      <section id="preprocessing-code">
+        <h3>Preprocessing Code Walkthrough</h3>
+        <p>
+          Here we dive deeper into advanced preprocessing techniques such as scaling and encoding categorical variables.
+        </p>
+        <div class="code-snippet">
+          <pre><code>from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
+# Define transformers for numeric and categorical data
+numeric_features = ['age', 'salary']
+numeric_transformer = StandardScaler()
+categorical_features = ['department', 'education']
+categorical_transformer = OneHotEncoder()
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)
+    ])
+
+# Apply preprocessing transformations
+X_processed = preprocessor.fit_transform(X)
+print("Preprocessing complete!")</code></pre>
+        </div>
+      </section>
+
+      <img src="images/data-preprocessing.png" alt="Data Preprocessing Steps" />
     </section>
-    
+
+    <!-- Model Development Section -->
     <section id="model">
       <h2>Model Development</h2>
       <p>
-        The model development phase explores several machine learning algorithms to predict absenteeism:
+        In this phase, various machine learning algorithms are explored to predict absenteeism.
+        Regression techniques and classification methods are implemented with hyperparameter tuning.
       </p>
-      <ul>
-        <li><strong>Regression Techniques:</strong> Linear regression and decision trees for predicting the number of absent days.</li>
-        <li><strong>Classification Methods:</strong> Logistic regression, random forests, and gradient boosting to categorize high-risk absenteeism cases.</li>
-        <li><strong>Hyperparameter Tuning:</strong> Utilizing grid search and cross-validation to optimize model parameters.</li>
-      </ul>
-      <img src="images/modeling.png" alt="Modeling Process">
+      <div class="code-snippet">
+        <pre><code>from sklearn.ensemble import RandomForestClassifier
+
+# Initialize and train the RandomForestClassifier
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+print("Model training complete!")</code></pre>
+      </div>
+      <img src="images/modeling.png" alt="Modeling Process" />
     </section>
-    
+
+    <!-- Results & Evaluation Section -->
     <section id="results">
       <h2>Results & Evaluation</h2>
       <p>
-        Model performance was measured using various metrics:
+        Model performance is evaluated using metrics like accuracy, precision, recall, F1 score, MAE, and RMSE.
+        Visual tools such as confusion matrices and error plots further validate model performance.
       </p>
-      <ul>
-        <li><strong>Accuracy:</strong> For classification models to gauge overall performance.</li>
-        <li><strong>Precision, Recall, and F1 Score:</strong> To balance the trade-offs between different error types.</li>
-        <li><strong>MAE & RMSE:</strong> For regression models to quantify prediction errors.</li>
-      </ul>
-      <p>
-        Visual comparisons, confusion matrices, and error distribution plots further highlight model strengths and weaknesses.
-      </p>
-      <img src="images/model-results.png" alt="Model Evaluation Metrics">
+      <div class="code-snippet">
+        <pre><code>from sklearn.metrics import accuracy_score, confusion_matrix
+
+# Making predictions and evaluating the model
+predictions = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, predictions))
+print("Confusion Matrix:", confusion_matrix(y_test, predictions))</code></pre>
+      </div>
+      <img src="images/model-results.png" alt="Model Evaluation Metrics" />
     </section>
-    
-    <section id="code">
-      <h2>Code Snippets</h2>
-      <p>
-        Below are some key code snippets that illustrate the steps taken in the project.
-      </p>
-      
-      <h3>Data Preprocessing and Model Training</h3>
-      <pre><code class="python">
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
 
-# Load data
-data = pd.read_csv("absenteeism_data.csv")
-
-# Data cleaning: fill missing values
-data.fillna(method="ffill", inplace=True)
-
-# Split the data into features and target
-X = data.drop("absenteeism", axis=1)
-y = data["absenteeism"]
-
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Model training
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-      </code></pre>
-      
-      <h3>Exploratory Data Analysis (EDA)</h3>
-      <pre><code class="python">
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Visualize the distribution of absenteeism days
-sns.histplot(data['absenteeism'], kde=True)
-plt.title("Distribution of Absenteeism Days")
-plt.xlabel("Number of Absent Days")
-plt.ylabel("Frequency")
-plt.show()
-      </code></pre>
-    </section>
-    
+    <!-- Conclusion & Contact Sections -->
     <section id="conclusion">
       <h2>Conclusion & Future Work</h2>
       <p>
-        The project demonstrates a complete workflow from raw data to actionable insights. Key conclusions include:
+        The project demonstrates a complete workflow from raw data to actionable insights.
+        Future work includes exploring advanced deep learning techniques and deploying a real-time prediction system.
       </p>
-      <ul>
-        <li>The critical role of thorough data exploration and cleaning in ensuring model reliability.</li>
-        <li>How effective feature engineering can enhance model predictions.</li>
-        <li>Potential for future enhancements, such as incorporating deep learning techniques, real-time data processing, and deploying the model in production.</li>
-      </ul>
     </section>
-    
+
     <section id="contact">
       <h2>Contact</h2>
       <p>
-        For further discussion or inquiries, please contact me at <a href="mailto:your.email@example.com">your.email@example.com</a>.
+        For further discussion or inquiries, please contact me at
+        <a href="mailto:your.email@example.com">your.email@example.com</a>.
       </p>
     </section>
   </main>
-  
+
   <footer>
     <p>&copy; 2025 Data Science Portfolio. All Rights Reserved.</p>
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
