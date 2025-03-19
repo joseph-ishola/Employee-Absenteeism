@@ -1,274 +1,1164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predicting Workplace Absenteeism: Data Science Project</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicting Excessive Absenteeism Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+
+    <style>
+        .code-container {
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 1em;
+            margin: 1em 0;
+            overflow: auto;
+        }
+  
+        .code-container pre {
+            color: #333;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-bg: #343a40;
+            --text-color: #333;
+            --light-text: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+        
+        h1 {
+            margin-bottom: 0.5rem;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 1.2rem 0 0.8rem 0;
+        }
+        
+        p, ul, ol {
+            margin-bottom: 1rem;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            background-color: #f0f0f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        }
+        
+        .section {
+            background-color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .code-container {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0 1.5rem 0;
+        }
+        
+        .highlight {
+            background-color: rgba(52, 152, 219, 0.2);
+            padding: 0.2rem;
+            border-radius: 4px;
+        }
+        
+        .results {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .metric {
+            flex: 1;
+            min-width: 200px;
+            background-color: var(--light-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .metric h4 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .viz-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .viz-item {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .viz-item img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .viz-item h4 {
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            margin: 0;
+        }
+        
+        .viz-item p {
+            padding: 1rem;
+            margin: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .workflow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .workflow-step {
+            width: 80%;
+            padding: 1rem;
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .workflow-step::after {
+            content: "↓";
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .workflow-step:last-child::after {
+            content: none;
+        }
+        
+        .recommendation {
+            background-color: #f0f7ff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .recommendation h4 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .conclusion-card {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .conclusion-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .results {
+                flex-direction: column;
+            }
+            
+            .workflow-step {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="nav-container">
-      <div class="logo">
-        <h1>Workplace Absenteeism</h1>
-        <p>Data Science Project Portfolio</p>
-      </div>
-      <button class="hamburger" id="hamburger">&#9776;</button>
-      <nav>
-        <ul class="nav-links" id="nav-links">
-          <li><a href="#overview">Overview</a></li>
-          <li>
-            <a href="#eda">EDA</a>
-            <ul class="dropdown">
-              <li><a href="#eda-descriptive">Descriptive Stats</a></li>
-              <li><a href="#eda-visualization">Visualizations</a></li>
-              <li><a href="#eda-outliers">Outlier Analysis</a></li>
-              <li><a href="#eda-code">Code Walkthrough</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#preprocessing">Preprocessing</a>
-            <ul class="dropdown">
-              <li><a href="#preprocessing-cleaning">Data Cleaning</a></li>
-              <li><a href="#preprocessing-feature">Feature Engineering</a></li>
-              <li><a href="#preprocessing-splitting">Data Splitting</a></li>
-              <li><a href="#preprocessing-code">Code Walkthrough</a></li>
-            </ul>
-          </li>
-          <li><a href="#model">Model</a></li>
-          <li><a href="#results">Results</a></li>
-          <li><a href="#conclusion">Conclusion</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+    <header>
+        <h1>Predicting Excessive Absenteeism in the Workplace</h1>
+        <p>A comprehensive analysis using logistic regression</p>
+    </header>
+    
+    <div class="section">
+        <h2>Project Overview</h2>
+        <p>This project aims to predict excessive absenteeism in the workplace using machine learning techniques. We define "excessive absenteeism" as being absent for 4 or more hours, which is equivalent to taking half a day off. By identifying factors that contribute to excessive absenteeism, employers can develop targeted strategies to address underlying issues and improve workplace wellbeing.</p>
+        
+        <p>Excessive absenteeism represents a significant challenge for organizations, affecting productivity, team dynamics, and operational costs. Through data-driven insights, we can better understand the patterns and predictors of absenteeism, enabling more effective preventive measures and management strategies.</p>
+        
+        <div class="workflow-diagram">
+            <div class="workflow-step">Data Loading and Exploration</div>
+            <div class="workflow-step">Feature Engineering and Target Creation</div>
+            <div class="workflow-step">Data Preprocessing and Transformation</div>
+            <div class="workflow-step">Model Training (Logistic Regression)</div>
+            <div class="workflow-step">Feature Selection Based on Coefficients</div>
+            <div class="workflow-step">Final Model Evaluation and Interpretation</div>
+        </div>
     </div>
-  </header>
-
-  <main>
-    <!-- Overview Section -->
-    <section id="overview">
-      <h2>Project Overview</h2>
-      <p>
-        This project aims to predict workplace absenteeism by analyzing historical employee data.
-        It covers data acquisition, exploratory data analysis (EDA), data cleaning and preprocessing,
-        model development, evaluation, and conclusions. Visual aids and code examples guide you
-        through every step.
-      </p>
-      <img src="images/overview-diagram.png" alt="Project Overview Diagram" />
-      <div class="code-snippet">
-        <pre><code>// Welcome message and basic project setup
-print("Welcome to the Predicting Workplace Absenteeism project!")</code></pre>
-      </div>
-    </section>
-
-    <!-- Exploratory Data Analysis (EDA) Section -->
-    <section id="eda">
-      <h2>Exploratory Data Analysis (EDA)</h2>
-      <p>
-        In this section, we dive into various techniques to understand and visualize the dataset,
-        an essential step in any data science workflow.
-      </p>
-
-      <!-- Descriptive Statistics -->
-      <section id="eda-descriptive">
-        <h3>Descriptive Statistics</h3>
-        <p>Summarizing key statistics to understand central tendencies, dispersion, and overall data structure.</p>
-        <div class="code-snippet">
-          <pre><code>import pandas as pd
-
-# Load the dataset
-df = pd.read_csv('employee_data.csv')
-
-# Display descriptive statistics
-print(df.describe())</code></pre>
+    
+    <div class="section">
+        <h2>1. Exploratory Data Analysis (EDA)</h2>
+        <p>We began by loading the dataset and examining its basic characteristics to gain insights into the data structure and identify potential issues that might affect our modeling.</p>
+        
+        <h3>Dataset Overview</h3>
+        <p>The dataset contains information about employee absenteeism, including various factors that might contribute to an employee being absent from work. Our initial exploration revealed the following:</p>
+        
+        <div id="dataOverview"></div>
+        
+        <h3>Key Features</h3>
+        <p>The dataset includes the following key features:</p>
+        <ul>
+            <li><strong>Reason for Absence</strong>: Various reasons categorized into four types:
+                <ul>
+                    <li>Reason Type 1: Related to illness with medical certificates</li>
+                    <li>Reason Type 2: Related to medical consultations and examinations</li>
+                    <li>Reason Type 3: Related to serious health conditions requiring hospitalization</li>
+                    <li>Reason Type 4: Related to personal circumstances (e.g., family matters)</li>
+                </ul>
+            </li>
+            <li><strong>Date</strong>: Timestamp of the absence record (later engineered into Month and Day of the Week)</li>
+            <li><strong>Transportation Expense</strong>: Cost of transportation to work</li>
+            <li><strong>Distance to Work</strong>: Distance from residence to workplace in kilometers</li>
+            <li><strong>Age</strong>: Age of the employee</li>
+            <li><strong>Daily Work Load Average</strong>: Average amount of work per day in minutes</li>
+            <li><strong>Body Mass Index</strong>: Body mass index of the employee</li>
+            <li><strong>Education</strong>: Education level:
+                <ul>
+                    <li>Originally encoded as 1: High School, 2: Graduate, 3: Postgraduate, 4: Masters/PhD.</li>
+                    <li>To simplify the data and highlight education's impact on absenteeism, we engineered it into a binary variable:
+						<ul>
+							<li>High school (1) was mapped to 0.</li>
+							<li>Graduate, Postgraduate, and Masters/PhD (2, 3, 4) were mapped to 1.</li>
+						</ul>
+					</li>
+                </ul>
+            </li>
+            <li><strong>Children</strong>: Number of children</li>
+            <li><strong>Pets</strong>: Number of pets</li>
+            <li><strong>Absenteeism Time in Hours</strong>: Time of absence in hours (our target feature for prediction)</li>
+        </ul>
+        
+        <h3>Distribution of Absenteeism Hours</h3>
+        <p>Understanding the distribution of absenteeism hours is crucial for setting an appropriate threshold for "excessive" absence. The histogram below shows the distribution of absenteeism time in hours:</p>
+        
+        <div class="viz-container">
+            <div class="viz-item">
+                <h4>Distribution of Absenteeism Hours</h4>
+                <div id="distributionPlot"></div>
+                <p>The distribution shows a right-skewed pattern, with most absences being relatively short. This pattern is typical for absence data, where brief absences are common, and extended absences are comparatively rare. The median value is approximately 4 hours, which we used as our threshold for defining excessive absenteeism.</p>
+            </div>
         </div>
-      </section>
+        
+        <h3>Missing Values Analysis</h3>
+        <p>We checked for missing values in the dataset to ensure data completeness. Any missing values would need to be handled appropriately during the preprocessing stage.</p>
+        
+        <div id="missingValues"></div>
+    </div>
+    
+    <div class="section">
+        <h2>2. Feature Engineering</h2>
+        <p>We performed several feature engineering steps to prepare the data for modeling:</p>
+        
+        <h3>Categorical Features Transformation</h3>
+        <p>We transformed categorical features to make them more suitable for our model:</p>
+        <ul>
+            <li><strong>Reason for Absence</strong>: We categorized the reasons into four types and created binary indicator variables (Reason Type 1, Reason Type 2, Reason Type 3, Reason Type 4). This transformation allows for better representation of different types of absences while avoiding multicollinearity issues</li>
+            <li><strong>Date</strong>: We extracted the Month and Day of the Week from the date field to capture temporal patterns</li>
+            <li><strong>Education</strong>: The Education column was mapped into a binary class (0 and 1), where:
+				<ul>
+					<li>0 represents employees with only a high school education.</li>
+					<li>1 represents employees with higher education levels (Graduate, Postgraduate, Masters, or PhD).</li>
+				</ul>
+			</li>
+		</ul>
+        
+        <div class="code-container">
+            <pre>
+# Create reason type dummy variables
+reason_columns = pd.get_dummies(data['Reason for Absence'], dtype=int, drop_first=True)
 
-      <!-- Data Visualization -->
-      <section id="eda-visualization">
-        <h3>Data Visualization</h3>
-        <p>Visualizing distributions and relationships using histograms and scatter plots.</p>
-        <div class="code-snippet">
-          <pre><code>import matplotlib.pyplot as plt
+# Group reasons into categories and create aggregated type columns
+data['Reason_Type_1'] = reason_columns.iloc[:, 1:14].sum(axis=1)
+data['Reason_Type_2'] = reason_columns.iloc[:, 15:17].sum(axis=1)
+data['Reason_Type_3'] = reason_columns.iloc[:, 18:21].sum(axis=1)
+data['Reason_Type_4'] = reason_columns.iloc[:, 22:].sum(axis=1)
 
-# Plot the distribution of absences
-plt.hist(df['absences'], bins=30, color='skyblue')
-plt.title('Distribution of Absences')
-plt.xlabel('Number of Absences')
-plt.ylabel('Frequency')
-plt.show()</code></pre>
+# Extract month and day of week from date
+def extract_month(x):
+    return x.month
+	
+data['Month Value'] = data['Date'].apply(extract_month)
+
+def extract_day_of_week(x):
+    return x.day_of_week
+	
+data['Day of the Week'] = data['Date'].apply(extract_day_of_week)
+
+# Group Education into binary class
+data['Education'] = data_mod['Education'].map({1:0, 2:1, 3:1, 4:1})
+</pre>
         </div>
-      </section>
-
-      <!-- Outlier Analysis -->
-      <section id="eda-outliers">
-        <h3>Outlier Analysis</h3>
-        <p>Using boxplots to identify potential anomalies in the data.</p>
-        <div class="code-snippet">
-          <pre><code>import seaborn as sns
-
-# Create a boxplot to detect outliers in absences
-sns.boxplot(x=df['absences'])
-plt.title('Boxplot for Absences')
-plt.show()</code></pre>
+        
+        <h3>Target Variable Creation</h3>
+        <p>We created a binary target variable called <code>"Excessive absence"</code> to represent excessive absenteeism, based on the median value of absence hours:</p>
+        <ul>
+            <li>If "Absenteeism time in hours" < 4, then "Excessive absence" = 0 (Not excessive)</li>
+            <li>If "Absenteeism time in hours" ≥ 4, then "Excessive absence" = 1 (Excessive)</li>
+        </ul>
+        
+        <p>This approach ensures a balanced dataset with roughly equal numbers of each class, which is beneficial for logistic regression modeling.</p>
+        
+        <div class="code-container">
+            <pre>
+# Create binary target variable based on median threshold
+median_absence = data['Absenteeism time in hours'].median()  # 4 hours
+data['Excessive absence'] = (data['Absenteeism time in hours'] >= 4).astype(int)
+</pre>
         </div>
-      </section>
-
-      <!-- Additional EDA Code Walkthrough -->
-      <section id="eda-code">
-        <h3>EDA Code Walkthrough</h3>
-        <p>
-          This section provides an overview of additional EDA code, including correlation analysis and pair plots.
-        </p>
-        <div class="code-snippet">
-          <pre><code>import seaborn as sns
-
-# Correlation heatmap to visualize relationships between variables
-plt.figure(figsize=(10, 8))
-sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
-plt.title('Correlation Heatmap')
-plt.show()</code></pre>
+        
+        <div class="viz-container">
+            <div class="viz-item">
+                <h4>Distribution of Excessive Absence Classes</h4>
+                <div id="classDistribution"></div>
+                <p>The class distribution shows the balance between "not excessive" (0) and "excessive" (1) absence cases in our dataset. Using the median as a threshold helps ensure a balanced dataset.</p>
+            </div>
         </div>
-      </section>
-
-      <img src="images/eda-visualizations.png" alt="EDA Visualizations" />
-    </section>
-
-    <!-- Data Preprocessing Section -->
-    <section id="preprocessing">
-      <h2>Data Preprocessing</h2>
-      <p>
-        Preprocessing transforms raw data into a cleaner dataset ready for modeling. This section includes data cleaning, feature engineering, and splitting the dataset.
-      </p>
-
-      <!-- Data Cleaning -->
-      <section id="preprocessing-cleaning">
-        <h3>Data Cleaning</h3>
-        <p>Handling missing values, removing duplicates, and ensuring consistency in the data.</p>
-        <div class="code-snippet">
-          <pre><code># Filling missing values with column means
-df.fillna(df.mean(), inplace=True)
-print("Missing values handled!")</code></pre>
+        
+        <h3>Correlation Analysis</h3>
+        <p>We analyzed the correlations between numerical features to identify potential relationships and predictive features:</p>
+        
+        <div class="viz-container">
+            <div class="viz-item">
+                <h4>Correlation Matrix</h4>
+                <div id="correlationMatrix"></div>
+                <p>The correlation matrix highlights relationships between different features. Strong correlations (positive or negative) can indicate important predictive relationships or potential multicollinearity issues.</p>
+            </div>
         </div>
-      </section>
+    </div>
+    
+    <div class="section">
+        <h2>3. Data Preprocessing</h2>
+        <p>Before building our model, we needed to prepare the data appropriately. This involved handling missing values, encoding categorical variables, and scaling numerical features.</p>
+        
+        <h3>Preprocessing Pipeline</h3>
+        <p>We created a preprocessing pipeline to ensure consistent data transformation for both training and future prediction data:</p>
+        
+        <pre><code class="language-python">
+# Separate features and target
+X = data.drop(['Excessive absence', 'Absenteeism time in hours', 'Date', 'Reason for Absence'], axis=1)
+y = data['Excessive absence']
 
-      <!-- Feature Engineering -->
-      <section id="preprocessing-feature">
-        <h3>Feature Engineering</h3>
-        <p>Creating new features and transforming existing ones to improve model performance.</p>
-        <div class="code-snippet">
-          <pre><code># Extracting day of the week from a date column
-df['day_of_week'] = pd.to_datetime(df['date']).dt.dayofweek
-print(df.head())</code></pre>
-        </div>
-      </section>
+# Identify categorical and numerical features
+categorical_features = X.select_dtypes(include=['object']).columns.tolist()
+numerical_features = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
 
-      <!-- Data Splitting -->
-      <section id="preprocessing-splitting">
-        <h3>Data Splitting</h3>
-        <p>Dividing data into training and test sets for unbiased model evaluation.</p>
-        <div class="code-snippet">
-          <pre><code>from sklearn.model_selection import train_test_split
+# Create preprocessing pipelines for both numerical and categorical data
+numerical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
 
-# Splitting the dataset into features and target
-X = df.drop('absences', axis=1)
-y = df['absences']
-
-# Splitting into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-print("Data splitting completed!")</code></pre>
-        </div>
-      </section>
-
-      <!-- Additional Preprocessing Code Walkthrough -->
-      <section id="preprocessing-code">
-        <h3>Preprocessing Code Walkthrough</h3>
-        <p>
-          Here we dive deeper into advanced preprocessing techniques such as scaling and encoding categorical variables.
-        </p>
-        <div class="code-snippet">
-          <pre><code>from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
-
-# Define transformers for numeric and categorical data
-numeric_features = ['age', 'salary']
-numeric_transformer = StandardScaler()
-categorical_features = ['department', 'education']
-categorical_transformer = OneHotEncoder()
-
-preprocessor = ColumnTransformer(
-    transformers=[
-        ('num', numeric_transformer, numeric_features),
-        ('cat', categorical_transformer, categorical_features)
+if categorical_features:
+    categorical_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='most_frequent')),
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))
     ])
+    
+    # Combine preprocessing steps
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', numerical_transformer, numerical_features),
+            ('cat', categorical_transformer, categorical_features)
+        ])
+else:
+    # If no categorical features, use only numerical transformer
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', numerical_transformer, numerical_features)
+        ])</code></pre>
+        
+        <h3>Data Splitting</h3>
+        <p>We split the data into training (70%) and testing (30%) sets to properly evaluate our model's performance:</p>
+        
+        <pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)</code></pre>
+    </div>
+    
+    <div class="section">
+        <h2>4. Model Building</h2>
+        <p>We chose logistic regression as our classification model due to its interpretability and efficiency. Logistic regression is particularly suitable for binary classification problems like predicting excessive absenteeism.</p>
+        
+        <h3>Model Pipeline</h3>
+        <p>We created a complete pipeline that combines preprocessing and the logistic regression model:</p>
+        
+        <div class="code-container">
+            <pre>
+model = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('classifier', LogisticRegression(random_state=42, max_iter=1000))
+])
 
-# Apply preprocessing transformations
-X_processed = preprocessor.fit_transform(X)
-print("Preprocessing complete!")</code></pre>
+model.fit(X_train, y_train)</pre>
         </div>
-      </section>
+        
+        <p>Using a pipeline ensures that all preprocessing steps are consistently applied to both training and test data, reducing the risk of data leakage and making the model more robust.</p>
+    </div>
+    
+    <div class="section">
+        <h2>5. Feature Selection Based on Coefficients</h2>
+        <p>After training the initial model, we performed feature selection based on the logistic regression coefficients. This step is crucial for improving model interpretability and potentially enhancing performance by focusing on the most significant predictors.</p>
+        
+        <h3>Coefficient Analysis</h3>
+        <p>We extracted the coefficients from the trained model to evaluate the importance of each feature:</p>
+        
+        <div class="code-container">
+            <pre>
+# Get feature names after preprocessing
+feature_names = numerical_features
+if categorical_features:
+    # Get one-hot encoded feature names if applicable
+    encoder = preprocessor.named_transformers_['cat']['onehot']
+    categorical_feature_names = encoder.get_feature_names_out(categorical_features)
+    feature_names = numerical_features + list(categorical_feature_names)
 
-      <img src="images/data-preprocessing.png" alt="Data Preprocessing Steps" />
-    </section>
+# Extract coefficients
+coefficients = model.named_steps['classifier'].coef_[0]
+odds_ratios = np.exp(coefficients)
 
-    <!-- Model Development Section -->
-    <section id="model">
-      <h2>Model Development</h2>
-      <p>
-        In this phase, various machine learning algorithms are explored to predict absenteeism.
-        Regression techniques and classification methods are implemented with hyperparameter tuning.
-      </p>
-      <div class="code-snippet">
-        <pre><code>from sklearn.ensemble import RandomForestClassifier
+# Create a DataFrame to display the coefficients
+coef_df = pd.DataFrame({
+    'Features': feature_names,
+    'Coefficients': coefficients,
+    'Odds_ratio': odds_ratios
+}).sort_values('Coefficients', ascending=False)
 
-# Initialize and train the RandomForestClassifier
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-print("Model training complete!")</code></pre>
-      </div>
-      <img src="images/modeling.png" alt="Modeling Process" />
-    </section>
+print(coef_df)</pre>
+        </div>
+        
+        <table>
+            <tr>
+                <th>Features</th>
+                <th>Coefficients</th>
+                <th>Odds_ratio</th>
+            </tr>
+            <tr>
+                <td>Reason Type 3</td>
+                <td>3.096739</td>
+                <td>22.125672</td>
+            </tr>
+            <tr>
+                <td>Reason Type 1</td>
+                <td>2.801363</td>
+                <td>16.467081</td>
+            </tr>
+            <tr>
+                <td>Reason Type 2</td>
+                <td>0.933541</td>
+                <td>2.543499</td>
+            </tr>
+            <tr>
+                <td>Reason Type 4</td>
+                <td>0.857183</td>
+                <td>2.356513</td>
+            </tr>
+            <tr>
+                <td>Transportation Expense</td>
+                <td>0.613216</td>
+                <td>1.846359</td>
+            </tr>
+            <tr>
+                <td>Children</td>
+                <td>0.361898</td>
+                <td>1.436052</td>
+            </tr>
+            <tr>
+                <td>Body Mass Index</td>
+                <td>0.271155</td>
+                <td>1.311478</td>
+            </tr>
+            <tr>
+                <td>Month Value</td>
+                <td>0.166403</td>
+                <td>1.181049</td>
+            </tr>
+            <tr>
+                <td>Daily Work Load Average</td>
+                <td>-0.000077</td>
+                <td>0.999923</td>
+            </tr>
+            <tr>
+                <td>Distance to Work</td>
+                <td>-0.007779</td>
+                <td>0.992251</td>
+            </tr>
+            <tr>
+                <td>Day of the Week</td>
+                <td>-0.084316</td>
+                <td>0.919141</td>
+            </tr>
+            <tr>
+                <td>Age</td>
+                <td>-0.165545</td>
+                <td>0.847431</td>
+            </tr>
+            <tr>
+                <td>Education</td>
+                <td>-0.206027</td>
+                <td>0.813811</td>
+            </tr>
+            <tr>
+                <td>Pets</td>
+                <td>-0.285729</td>
+                <td>0.751466</td>
+            </tr>
+            <tr>
+                <td>intercept</td>
+                <td>-1.656628</td>
+                <td>0.190781</td>
+            </tr>
+        </table>
+        
+        <h3>Interpretation of Coefficients</h3>
+        <p>The coefficient values provide insights into the impact of each feature on the likelihood of excessive absenteeism:</p>
+        <ul>
+            <li><strong>Positive Coefficients</strong>: Features with positive coefficients increase the probability of excessive absenteeism. Higher coefficients indicate a stronger positive relationship.</li>
+            <li><strong>Negative Coefficients</strong>: Features with negative coefficients decrease the probability of excessive absenteeism.</li>
+            <li><strong>Odds Ratio</strong>: The exponential of the coefficient represents how much the odds of excessive absenteeism change with a one-unit increase in the feature. An odds ratio > 1 indicates increased odds, while < 1 indicates decreased odds.</li>
+        </ul>
+        
+        <h3>Feature Selection Decision</h3>
+        <p>Based on the coefficient analysis, we made informed decisions about feature selection:</p>
+        <ul>
+            <li>We identified that <strong>Reason Type 3</strong> (serious health conditions requiring hospitalization) and <strong>Reason Type 1</strong> (illness with medical certificates) are the strongest predictors of excessive absenteeism, with odds ratios of 22.13 and 16.47 respectively.</li>
+            <li>Features with coefficients close to zero (e.g., <strong>Daily Work Load Average</strong> with coefficient -0.000077) have minimal impact on the prediction and could potentially be removed.</li>
+            <li>Some features with relatively small negative coefficients, such as <strong>Pets</strong> (-0.285729), <strong>Education</strong> (-0.206027), and <strong>Age</strong> (-0.165545), were evaluated for potential removal.</li>
+        </ul>
+        
+        <p>The final model retained features with significant predictive power while removing those with minimal impact to create a more parsimonious and interpretable model.</p>
+    </div>
+    
+    <div class="section">
+        <h2>6. Final Model Evaluation</h2>
+        <p>After feature selection, we retrained the model and evaluated its performance on the test set using various metrics.</p>
+        
+        <h3>Performance Metrics</h3>
+        <div id="performanceMetrics" class="results">
+            <div class="metric">
+                <h4>Accuracy</h4>
+                <div class="value">0.75</div>
+                <p>Proportion of correct predictions</p>
+            </div>
+            <div class="metric">
+                <h4>Precision (Class 1)</h4>
+                <div class="value">0.75</div>
+                <p>When predicted excessive, how often correct</p>
+            </div>
+            <div class="metric">
+                <h4>Recall (Class 1)</h4>
+                <div class="value">0.70</div>
+                <p>Of actual excessive cases, how many were caught</p>
+            </div>
+            <div class="metric">
+                <h4>F1-Score (Class 1)</h4>
+                <div class="value">0.72</div>
+                <p>Harmonic mean of precision and recall</p>
+            </div>
+            <div class="metric">
+                <h4>ROC AUC</h4>
+                <div class="value">0.78</div>
+                <p>Area under ROC curve</p>
+            </div>
+        </div>
+        
+        <h3>Classification Report</h3>
+        <p>The detailed classification report provides a comprehensive view of model performance:</p>
+        
+        <pre><code class="language-text">
+Model Accuracy: 0.7500
 
-    <!-- Results & Evaluation Section -->
-    <section id="results">
-      <h2>Results & Evaluation</h2>
-      <p>
-        Model performance is evaluated using metrics like accuracy, precision, recall, F1 score, MAE, and RMSE.
-        Visual tools such as confusion matrices and error plots further validate model performance.
-      </p>
-      <div class="code-snippet">
-        <pre><code>from sklearn.metrics import accuracy_score, confusion_matrix
+Logistic Regression Classification Report:
+              precision    recall  f1-score   support
+           0       0.75      0.80      0.77        74
+           1       0.75      0.70      0.72        66
+    accuracy                           0.75       140
+   macro avg       0.75      0.75      0.75       140
+weighted avg       0.75      0.75      0.75       140
 
-# Making predictions and evaluating the model
-predictions = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, predictions))
-print("Confusion Matrix:", confusion_matrix(y_test, predictions))</code></pre>
-      </div>
-      <img src="images/model-results.png" alt="Model Evaluation Metrics" />
-    </section>
+ROC AUC Score: 0.78
+</code></pre>
+        
+        <p>This report indicates:</p>
+        <ul>
+            <li>The model achieved a balanced performance with 75% accuracy on the test data.</li>
+            <li>For predicting non-excessive absences (class 0), the model achieved 75% precision and 80% recall.</li>
+            <li>For predicting excessive absences (class 1), the model achieved 75% precision and 70% recall.</li>
+            <li>The ROC AUC score of 0.78 indicates good discriminative ability, significantly better than random guessing (0.5).</li>
+        </ul>
+        
+        <h3>Confusion Matrix</h3>
+        <p>The confusion matrix provides a detailed breakdown of our model's predictions:</p>
+        
+        <div class="viz-container">
+            <div class="viz-item">
+                <h4>Confusion Matrix</h4>
+                <div id="confusionMatrix"></div>
+                <p>The confusion matrix shows that our model correctly identified most cases in both classes, with slightly better performance on class 0 (non-excessive absence) than class 1 (excessive absence).</p>
+            </div>
+        </div>
+        
+        <h3>ROC Curve</h3>
+        <p>The Receiver Operating Characteristic (ROC) curve illustrates the trade-off between sensitivity (true positive rate) and specificity (false positive rate):</p>
+        
+        <div class="viz-container">
+            <div class="viz-item">
+                <h4>ROC Curve</h4>
+                <div id="rocCurve"></div>
+                <p>The area under the ROC curve (AUC) of 0.78 indicates good discriminative ability. This means the model is effective at distinguishing between cases of excessive and non-excessive absenteeism.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>7. Feature Importance Analysis</h2>
+        <p>One of the advantages of logistic regression is the interpretability of its coefficients. By examining these coefficients, we can identify which factors have the strongest influence on predicting excessive absenteeism.</p>
+        
+        <div class="viz-container">
+            <div class="viz-item">
+                <h4>Top Features by Importance</h4>
+                <div id="featureImportance"></div>
+                <p>The chart displays the coefficients of the logistic regression model. Positive coefficients increase the probability of excessive absenteeism, while negative coefficients decrease it. The magnitude indicates the strength of the effect.</p>
+            </div>
+        </div>
+        
+        <h3>Interpretation of Key Factors</h3>
+        <div id="featureInterpretation">
+            <p>Based on our model, the following factors have the strongest influence on excessive absenteeism:</p>
+            <ul>
+                <li><strong>Reason Type 3 (Serious health conditions)</strong>: With the highest coefficient (3.10) and odds ratio (22.13), serious health conditions requiring hospitalization are the strongest predictor of excessive absenteeism. This makes intuitive sense, as such conditions typically require longer recovery periods.</li>
+                
+                <li><strong>Reason Type 1 (Illness with medical certificates)</strong>: With a coefficient of 2.80 and odds ratio of 16.47, documented illnesses are the second strongest predictor. This indicates that formally recognized medical conditions significantly increase the likelihood of longer absences.</li>
+                
+                <li><strong>Reason Types 2 & 4</strong>: Medical consultations/examinations and personal matters also positively predict excessive absences, but with lower magnitudes (odds ratios of 2.54 and 2.36 respectively).</li>
+                
+                <li><strong>Transportation Expense</strong>: With a coefficient of 0.61 and odds ratio of 1.85, higher transportation costs are associated with increased likelihood of excessive absence. This may reflect longer commutes or more complicated travel arrangements, which could make attendance more challenging.</li>
+                
+                <li><strong>Children</strong>: Having more children (coefficient 0.36, odds ratio 1.44) is associated with increased likelihood of excessive absence, potentially due to childcare responsibilities and children's illnesses.</li
+				
+				<li><strong>Body Mass Index</strong>: Higher BMI (coefficient 0.27, odds ratio 1.31) correlates with increased likelihood of excessive absences. This aligns with medical research linking higher BMI to various health issues that might necessitate absence.</li>
+                
+                <li><strong>Month Value</strong>: With a coefficient of 0.17 and odds ratio of 1.18, this suggests a slight seasonal effect, with later months in the year showing slightly increased probability of excessive absence.</li>
+                
+                <li><strong>Education</strong>: Having higher education levels (coefficient -0.21, odds ratio 0.81) is associated with decreased likelihood of excessive absence. This could reflect different job roles, health awareness, or workplace attitudes associated with education level.</li>
+                
+                <li><strong>Age</strong>: Interestingly, increasing age has a negative coefficient (-0.17, odds ratio 0.85), suggesting that older employees are actually less likely to have excessive absences. This contradicts some common assumptions but might reflect greater job commitment or responsibility associated with age.</li>
+                
+                <li><strong>Pets</strong>: Having more pets (coefficient -0.29, odds ratio 0.75) is associated with decreased likelihood of excessive absence. This unexpected finding might reflect lifestyle factors or could be a statistical artifact.</li>
+            </ul>
+        </div>
+    </div>
+	
+	<div class="section">
+        <h2>8. Probability Predictions</h2>
+        <p>Beyond binary classification, our logistic regression model can provide probability estimates for each prediction. These probabilities represent the model's confidence in classifying an absence as excessive or not.</p>
+        
+        <h3>Probability Distribution</h3>
+        <p>The distribution of predicted probabilities gives us insight into the model's decision-making process:</p>
+        
+        <div class="viz-container">
+            <div class="viz-item">
+                <h4>Distribution of Predicted Probabilities</h4>
+                <div id="probabilityDistribution"></div>
+                <p>The histogram shows the distribution of predicted probabilities for excessive absenteeism. The bimodal distribution suggests that the model is often confident in its predictions, with fewer borderline cases.</p>
+            </div>
+        </div>
+        
+		<p>Based on the distribution:</p>
+        <ul>
+            <li>The model’s prediction probabilities form two distinct peaks (bimodal).</li>
+			<li>It usually predicts very high (close to 1) or very low (close to 0) probabilities.</li>
+            <li>There are fewer cases where the model is unsure (i.e., probabilities close to 0.5).</li>
+            <li>This suggests the model is confident in its classifications.</li>
+        </ul>
+		
+        <h3>Probability Thresholds</h3>
+        <p>While we used the standard 0.5 threshold for classification, adjusting this threshold allows for different trade-offs between precision and recall:</p>
+        
+        <div class="viz-container">
+            <div class="viz-item">
+                <h4>Precision-Recall Trade-off</h4>
+                <div id="precisionRecallCurve"></div>
+                <p>This curve illustrates how precision and recall change with different probability thresholds. Organizations can choose a threshold that aligns with their specific goals—whether prioritizing catching all cases of excessive absenteeism (high recall) or ensuring high confidence in predictions (high precision).</p>
+            </div>
+        </div>
+        
+        <p>Based on our analysis, we recommend:</p>
+        <ul>
+            <li>For general purposes: Use the default 0.5 threshold, which balances precision and recall.</li>
+            <li>For preventive programs targeting at-risk employees: Consider lowering the threshold to 0.4 to catch more potential cases (higher recall).</li>
+            <li>For resource-intensive interventions: Consider raising the threshold to 0.6 to focus on high-confidence cases (higher precision).</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>9. Business Impact and Recommendations</h2>
+        <p>Our analysis provides several actionable insights for organizations looking to address excessive absenteeism effectively.</p>
+        
+        <h3>Key Findings</h3>
+        <ol>
+            <li>Serious health conditions (Reason Type 3) and documented illnesses (Reason Type 1) are the strongest predictors of excessive absenteeism.
+				<div class="viz-container">
+					<div class="viz-item">
+						<h4>Reason Type Vs. Probability of Excessive Absenteeism</h4>
+						<div id="ReasontypeVsExcessiveAbsenteeism"></div>
+						<p>This figure illustrates shows how the types affect the probabilities of excessive Absenteeism.</p>
+					</div>
+				</div>
+			</li>
+            <li>Higher transportation expenses are associated with increased absenteeism.
+				<div class="viz-container">
+					<div class="viz-item">
+						<h4>Transportation Expenses Vs. Probability of Excessive Absenteeism</h4>
+						<div id="TransportationExpensesVsExcessiveAbsenteeism"></div>
+						<p>This figure illustrates shows how the cost of Transportation affect the probabilities of excessive Absenteeism.</p>
+					</div>
+				</div>
+			</li>	
+            <li>Having more children increases the likelihood of excessive absences.
+				<div class="viz-container">
+					<div class="viz-item">
+						<h4>Children Vs. Probability of Excessive Absenteeism</h4>
+						<div id="ChildrenVsExcessiveAbsenteeism"></div>
+						<p>This figure illustrates shows how the number of children the employees have can affect the probabilities of excessive Absenteeism.</p>
+					</div>
+				</div>
+			</li>
+            <li>Higher BMI is correlated with more extended absences.</li>
+            <li>Older employees and those with higher education are less likely to have excessive absences.</li>
+        </ol>
+        
+        <h3>Strategic Recommendations</h3>
+        <div class="recommendation">
+            <h4>1. Implement Comprehensive Health Programs</h4>
+            <p>Given the strong influence of health-related factors, organizations should:</p>
+            <ul>
+                <li>Develop wellness programs targeting preventable health issues</li>
+                <li>Provide access to health screenings and regular check-ups</li>
+                <li>Consider health coaching particularly focused on weight management (given the BMI correlation)</li>
+                <li>Evaluate workplace ergonomics to prevent conditions that might lead to hospitalization</li>
+            </ul>
+        </div>
+        
+        <div class="recommendation">
+            <h4>2. Address Transportation Challenges</h4>
+            <p>The positive correlation between transportation expenses and absenteeism suggests:</p>
+            <ul>
+                <li>Implementing flexible work arrangements including remote work options where possible</li>
+                <li>Considering subsidized transportation programs or carpooling incentives</li>
+                <li>Evaluating office locations and potentially establishing satellite offices in areas with high employee concentration</li>
+            </ul>
+        </div>
+        
+        <div class="recommendation">
+            <h4>3. Support for Employees with Children</h4>
+            <p>To address the increased absenteeism associated with having children:</p>
+            <ul>
+                <li>Offer flexible scheduling options for parents</li>
+                <li>Consider backup childcare benefits or childcare subsidies</li>
+                <li>Implement more accommodating sick leave policies for family illnesses</li>
+                <li>Create parent support networks within the organization</li>
+            </ul>
+        </div>
+        
+        <div class="recommendation">
+            <h4>4. Leverage Strengths of Different Employee Demographics</h4>
+            <p>Based on findings related to age and education:</p>
+            <ul>
+                <li>Consider mentorship programs pairing older employees with younger staff to foster responsibility and engagement</li>
+                <li>Provide educational opportunities and professional development that might indirectly reduce absenteeism</li>
+                <li>Create mixed teams that balance various demographic factors</li>
+            </ul>
+        </div>
+        
+        <div class="recommendation">
+            <h4>5. Develop a Proactive Monitoring System</h4>
+            <p>Using the predictive model developed in this project:</p>
+            <ul>
+                <li>Implement an early warning system to identify employees at risk of excessive absenteeism</li>
+                <li>Target preventive measures and support resources to high-risk individuals</li>
+                <li>Continuously monitor seasonal patterns (Month Value effect) and prepare accordingly</li>
+                <li>Refine the model with new data to improve accuracy over time</li>
+            </ul>
+        </div>
+        
+        <div class="recommendation">
+            <h4>6. Develop Targeted Return-to-Work Programs</h4>
+            <p>For employees who have experienced serious health conditions:</p>
+            <ul>
+                <li>Create structured return-to-work protocols with gradually increasing responsibilities</li>
+                <li>Provide accommodations for ongoing recovery needs</li>
+                <li>Implement follow-up health monitoring to prevent recurrence</li>
+                <li>Design rehabilitation programs specific to the most common serious health conditions</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>10. Implementation Roadmap</h2>
+        <p>To effectively use this predictive model in practice, we recommend the following implementation steps:</p>
+        
+        <div class="workflow-diagram">
+            <div class="workflow-step">Phase 1: Data Infrastructure Setup (1-2 months)
+                <ul style="text-align: left; margin-top: 10px;">
+                    <li>Establish automated data collection processes</li>
+                    <li>Implement secure storage and processing pipelines</li>
+                    <li>Create data governance protocols</li>
+                </ul>
+            </div>
+            <div class="workflow-step">Phase 2: Model Integration (2-3 months)
+                <ul style="text-align: left; margin-top: 10px;">
+                    <li>Deploy the predictive model within HR systems</li>
+                    <li>Develop user-friendly interfaces for HR personnel</li>
+                    <li>Implement alert mechanisms for high-risk predictions</li>
+                </ul>
+            </div>
+            <div class="workflow-step">Phase 3: Intervention Program Development (3-4 months)
+                <ul style="text-align: left; margin-top: 10px;">
+                    <li>Design targeted intervention programs based on key factors</li>
+                    <li>Train HR staff and managers on using the predictive insights</li>
+                    <li>Establish protocols for ethical use of predictions</li>
+                </ul>
+            </div>
+            <div class="workflow-step">Phase 4: Monitoring and Refinement (Ongoing)
+                <ul style="text-align: left; margin-top: 10px;">
+                    <li>Track effectiveness of interventions</li>
+                    <li>Collect feedback from stakeholders</li>
+                    <li>Periodically retrain the model with new data</li>
+                    <li>Adjust intervention strategies based on outcomes</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h3>Technical Implementation</h3>
+        <p>For organizations looking to implement this predictive model, we provide the following Python code for model deployment:</p>
+        
+        <div class="code-container">
+            <pre>
+import pickle
+import pandas as pd
+from sklearn.pipeline import Pipeline
 
-    <!-- Conclusion & Contact Sections -->
-    <section id="conclusion">
-      <h2>Conclusion & Future Work</h2>
-      <p>
-        The project demonstrates a complete workflow from raw data to actionable insights.
-        Future work includes exploring advanced deep learning techniques and deploying a real-time prediction system.
-      </p>
-    </section>
+def load_model(model_path):
+    """Load the trained model from disk."""
+    with open(model_path, 'rb') as file:
+        model = pickle.load(file)
+    return model
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>
-        For further discussion or inquiries, please contact me at
-        <a href="mailto:your.email@example.com">your.email@example.com</a>.
-      </p>
-    </section>
-  </main>
+def preprocess_new_data(data):
+    """Preprocess new data to match training data format."""
+    # Create reason type dummy variables if needed
+    if 'Reason for Absence' in data.columns:
+        reason_columns = pd.get_dummies(data['Reason for Absence'], prefix='Reason_Type')
+        data['Reason_Type_1'] = reason_columns.iloc[:, 1:14].sum(axis=1)
+        data['Reason_Type_2'] = reason_columns.iloc[:, 15:17].sum(axis=1)
+        data['Reason_Type_3'] = reason_columns.iloc[:, 18:21].sum(axis=1)
+        data['Reason_Type_4'] = reason_columns.iloc[:, 22:].sum(axis=1)
+    
+    # Extract month and day of week if date is present
+    if 'Date' in data.columns:
+        data['Month_Value'] = pd.to_datetime(data['Date']).dt.month
+        data['Day_of_Week'] = pd.to_datetime(data['Date']).dt.dayofweek
+    
+    # Drop columns not used in the model
+    columns_to_drop = ['Absenteeism time in hours', 'Date', 'Reason for Absence']
+    data = data.drop([col for col in columns_to_drop if col in data.columns], axis=1)
+    
+    return data
 
-  <footer>
-    <p>&copy; 2025 Data Science Portfolio. All Rights Reserved.</p>
-  </footer>
+def predict_absenteeism(model, new_data):
+    """
+    Predict excessive absenteeism and return probabilities.
+    
+    Parameters:
+    model: Trained pipeline model
+    new_data: DataFrame with employee data
+    
+    Returns:
+    DataFrame with predictions and probabilities
+    """
+    # Preprocess the data
+    processed_data = preprocess_new_data(new_data)
+    
+    # Get predictions and probabilities
+    predictions = model.predict(processed_data)
+    probabilities = model.predict_proba(processed_data)[:, 1]
+    
+    # Add predictions to original data
+    results = new_data.copy()
+    results['Excessive_Absence_Predicted'] = predictions
+    results['Excessive_Absence_Probability'] = probabilities
+    
+    return results
 
-  <script src="script.js"></script>
+# Example usage
+if __name__ == "__main__":
+    # Load the model
+    model = load_model('absenteeism_model.pkl')
+    
+    # Load new employee data
+    new_data = pd.read_csv('new_employee_data.csv')
+    
+    # Make predictions
+    results = predict_absenteeism(model, new_data)
+    
+    # Filter to high-risk employees (probability > 0.7)
+    high_risk = results[results['Excessive_Absence_Probability'] > 0.7]
+    
+    print(f"Number of high-risk employees: {len(high_risk)}")
+    print(high_risk[['Employee_ID', 'Excessive_Absence_Probability']].head())</pre>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>11. Limitations and Future Work</h2>
+        <p>While our model provides valuable insights, it's important to acknowledge its limitations and identify opportunities for future improvement.</p>
+        
+        <h3>Current Limitations</h3>
+        <ol>
+            <li><strong>Limited Feature Set</strong>: The current model relies on a relatively small set of features. Many other factors that might influence absenteeism (e.g., job satisfaction, workplace culture, specific health conditions) were not included in the dataset.</li>
+            
+            <li><strong>Static Snapshot</strong>: The analysis represents a static snapshot in time rather than tracking trends over extended periods. Temporal patterns beyond month of the year may be missed.</li>
+            
+            <li><strong>Binary Classification</strong>: By transforming the problem into binary classification (excessive vs. not excessive), we've simplified the problem but may have lost nuance in predicting actual hours of absence.</li>
+            
+            <li><strong>Causality Not Established</strong>: While we identified correlations between features and excessive absenteeism, the model does not establish causality. Some relationships might be indirect or influenced by unmeasured confounding variables.</li>
+            
+            <li><strong>Limited Contextual Understanding</strong>: The model doesn't account for workplace-specific contexts or industry-specific factors that might influence absenteeism patterns.</li>
+        </ol>
+        
+        <h3>Future Work</h3>
+        <ol>
+            <li><strong>Enhanced Feature Engineering</strong>: 
+                <ul>
+                    <li>Include employee satisfaction metrics and engagement scores</li>
+                    <li>Incorporate team dynamics and management style indicators</li>
+                    <li>Add workplace environment factors (e.g., open office vs. private, workplace facilities)</li>
+                    <li>Consider external factors like weather patterns or public health data</li>
+                </ul>
+            </li>
+            
+            <li><strong>Advanced Modeling Approaches</strong>:
+                <ul>
+                    <li>Explore ensemble methods to potentially improve predictive performance</li>
+                    <li>Implement time series analysis to better capture temporal patterns</li>
+                    <li>Investigate multi-class classification or regression approaches to predict actual absence hours</li>
+                    <li>Consider hierarchical modeling to account for department or team-level effects</li>
+                </ul>
+            </li>
+            
+            <li><strong>Longitudinal Analysis</strong>:
+                <ul>
+                    <li>Track changes in absence patterns over time for individual employees</li>
+                    <li>Evaluate the effectiveness of interventions using causal inference methods</li>
+                    <li>Develop early warning indicators based on pattern changes</li>
+                </ul>
+            </li>
+            
+            <li><strong>Explainable AI Techniques</strong>:
+                <ul>
+                    <li>Implement SHAP (SHapley Additive exPlanations) values to provide more granular explanations of individual predictions</li>
+                    <li>Create personalized absence risk profiles with specific contributing factors</li>
+                    <li>Develop interactive visualization tools for HR professionals to explore model predictions</li>
+                </ul>
+            </li>
+            
+            <li><strong>Ethical and Privacy Enhancements</strong>:
+                <ul>
+                    <li>Develop more robust anonymization techniques for sensitive health-related data</li>
+                    <li>Implement fairness-aware algorithms to prevent potential bias in predictions</li>
+                    <li>Create transparent frameworks for how predictions are used in decision-making</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+    
+    <div class="section">
+        <h2>12. Conclusion</h2>
+        <div class="conclusion-card">
+            <h3>Summary of Findings</h3>
+            <p>This project successfully developed a predictive model for excessive absenteeism with 75% accuracy. We identified several key factors that influence excessive absenteeism, with serious health conditions and documented illnesses being the strongest predictors.</p>
+            
+            <p>Other significant factors included transportation expenses, having children, and BMI, all of which were positively associated with excessive absence. Interestingly, factors like age and education level showed negative associations, suggesting that older and more educated employees are less likely to have excessive absences.</p>
+            
+            <p>The model not only provides binary predictions but also probability estimates that can be used to identify employees at various risk levels, enabling targeted interventions based on organizational priorities and resource constraints.</p>
+        </div>
+        
+        <div class="conclusion-card">
+            <h3>Business Value</h3>
+            <p>The predictive model and insights derived from this analysis offer significant business value:</p>
+            <ul>
+                <li><strong>Proactive Management</strong>: Rather than reacting to absence patterns after they occur, organizations can take preventive measures based on risk predictions.</li>
+                <li><strong>Resource Optimization</strong>: By targeting interventions to employees at highest risk, organizations can allocate resources more efficiently.</li>
+                <li><strong>Workforce Planning</strong>: Understanding the factors that contribute to absenteeism can inform staffing decisions and contingency planning.</li>
+                <li><strong>Employee Well-being</strong>: The insights can guide wellness programs and support services that address the root causes of absence, potentially improving employee health and satisfaction.</li>
+                <li><strong>Cost Reduction</strong>: By reducing excessive absenteeism, organizations can minimize direct costs (temporary staffing, overtime) and indirect costs (reduced productivity, lower team morale).</li>
+            </ul>
+        </div>
+        
+        <div class="conclusion-card">
+            <h3>Final Thoughts</h3>
+            <p>Predicting and addressing excessive absenteeism requires a balanced approach that considers both organizational needs and employee well-being. While our model provides valuable insights, it should be used as one tool within a comprehensive absence management strategy that also includes supportive policies, health promotion, and attention to workplace culture.</p>
+            
+            <p>The most effective interventions will likely be those that view absence not merely as a problem to be minimized but as a signal of underlying issues that, when addressed, can lead to a healthier, more engaged, and ultimately more productive workforce.</p>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        
+        // visualization code
+        document.getElementById('distributionPlot').innerHTML = '<img src="pictures/absenteeism_distribution.png" alt="Distribution of Absenteeism Hours">';
+        document.getElementById('classDistribution').innerHTML = '<img src="pictures/Excessive_Absenteeism.png" alt="Class Distribution">';
+        document.getElementById('correlationMatrix').innerHTML = '<img src="pictures/correlation_matrix.png" alt="Correlation Matrix">';
+        document.getElementById('confusionMatrix').innerHTML = '<img src="pictures/Confusion_Matrix.png" alt="Confusion Matrix">';
+        document.getElementById('rocCurve').innerHTML = '<img src="pictures/ROC_Curve.png" alt="ROC Curve">';
+        document.getElementById('featureImportance').innerHTML = '<img src="pictures/Feature_Importance.png" alt="Feature Importance">';
+        document.getElementById('probabilityDistribution').innerHTML = '<img src="pictures/Probabilities_Distribution.png" alt="Probability Distribution">';
+        document.getElementById('precisionRecallCurve').innerHTML = '<img src="pictures/Precision_Recall_Curve.png" alt="Precision-Recall Curve">';
+		document.getElementById('ReasontypeVsExcessiveAbsenteeism').innerHTML = '<img src="/api/placeholder/600/400" alt="Reason Type-Excessive Absenteeism plot">';
+		document.getElementById('TransportationExpensesVsExcessiveAbsenteeism').innerHTML = '<img src="/api/placeholder/600/400" alt="Transportation-Excessive Absenteeism plot">';
+		document.getElementById('ChildrenVsExcessiveAbsenteeism').innerHTML = '<img src="/api/placeholder/600/400" alt="Children-Excessive Absenteeism plot">';
+        
+        // Placeholder data overview
+        document.getElementById('dataOverview').innerHTML = `
+        <table>
+            <tr>
+                <th>Dataset Characteristic</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Number of Instances</td>
+                <td>700</td>
+            </tr>
+            <tr>
+                <td>Number of Features</td>
+                <td>12</td>
+            </tr>
+            <tr>
+                <td>Missing Values</td>
+                <td>None</td>
+            </tr>
+            <tr>
+                <td>Target Variable</td>
+                <td>Excessive Absenteeism</td>
+            </tr>
+        </table>`;
+        
+        document.getElementById('missingValues').innerHTML = `
+        <p>Our analysis confirmed that there are no missing values in the dataset, which simplifies the preprocessing steps.</p>`;
+    </script>
 </body>
 </html>
