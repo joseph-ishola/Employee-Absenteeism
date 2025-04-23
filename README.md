@@ -1,5 +1,5 @@
 # Logistic Regression Model to Predict Employee Absenteeism
-Read more here https://joseph-ishola.github.io/Absenteeism/
+Read more here https://joseph-ishola.github.io/Employee-Absenteeism/
 
 ## Project Overview
 This project employs a logistic regression approach to predict excessive absenteeism in the workplace. By analyzing employee data, the model identifies key factors contributing to absenteeism. The insights derived from this analysis can help employers implement targeted strategies to improve employee well-being and reduce unnecessary absences.
